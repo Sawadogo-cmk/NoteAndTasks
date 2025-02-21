@@ -1,20 +1,13 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  TextInput,
-  ScrollView,
-} from "react-native";
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, TextInput, ScrollView } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import moment from "moment"; // Utilisation de la bibliothèque moment.js pour les dates
 
 export default function HomeScreen({ navigation }) {
-  console.log(navigation);
   const [notes, setNotes] = useState([]);
   const [filter, setFilter] = useState("all");
   const [searchText, setSearchText] = useState("");
+  const [timeFilter, setTimeFilter] = useState("today"); // Filtre de temps (today, week, month)
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -35,6 +28,22 @@ export default function HomeScreen({ navigation }) {
     }
   };
 
+  const filterByTime = (note) => {
+    const noteDate = moment(note.date); // Moment.js pour gérer les dates
+    const now = moment();
+    
+    if (timeFilter === "today") {
+      return noteDate.isSame(now, "day"); // Vérifie si la note est du jour
+    }
+    if (timeFilter === "week") {
+      return noteDate.isSame(now, "week"); // Vérifie si la note est de cette semaine
+    }
+    if (timeFilter === "month") {
+      return noteDate.isSame(now, "month"); // Vérifie si la note est de ce mois
+    }
+    return true; // Aucune filtration par défaut
+  };
+
   const filteredNotes = notes.filter((note) => {
     const matchesFilter =
       filter === "all" ||
@@ -47,7 +56,9 @@ export default function HomeScreen({ navigation }) {
       note.title.toLowerCase().includes(searchText.toLowerCase()) ||
       note.description.toLowerCase().includes(searchText.toLowerCase());
 
-    return matchesFilter && matchesSearch;
+    const matchesTime = filterByTime(note);
+
+    return matchesFilter && matchesSearch && matchesTime;
   });
 
   const FilterButton = ({ title, value }) => (
@@ -62,6 +73,25 @@ export default function HomeScreen({ navigation }) {
         style={[
           styles.filterButtonText,
           filter === value && styles.filterButtonTextActive,
+        ]}
+      >
+        {title}
+      </Text>
+    </TouchableOpacity>
+  );
+
+  const TimeFilterButton = ({ title, value }) => (
+    <TouchableOpacity
+      style={[
+        styles.filterButton,
+        timeFilter === value && styles.filterButtonActive,
+      ]}
+      onPress={() => setTimeFilter(value)}
+    >
+      <Text
+        style={[
+          styles.filterButtonText,
+          timeFilter === value && styles.filterButtonTextActive,
         ]}
       >
         {title}
@@ -123,6 +153,16 @@ export default function HomeScreen({ navigation }) {
         <FilterButton title="En cours" value="pending" />
       </ScrollView>
 
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.filterContainer}
+      >
+        <TimeFilterButton title="Aujourd'hui" value="today" />
+        <TimeFilterButton title="Cette semaine" value="week" />
+        <TimeFilterButton title="Ce mois" value="month" />
+      </ScrollView>
+
       <TouchableOpacity
         style={styles.addButton}
         onPress={() => navigation.navigate("AddNote")}
@@ -155,17 +195,13 @@ const styles = StyleSheet.create({
   filterContainer: {
     flexDirection: "row",
     marginBottom: 10,
-    height: 10,
+    height: 40, // Augmenter la hauteur pour les boutons de filtre
   },
   filterButton: {
     backgroundColor: "#e0e0e0",
     padding: 8,
     borderRadius: 5,
     marginRight: 8,
-    // height:90,
-    // flex:1,
-    // alignItems:'center',
-    // justifyContent:'center'
   },
   filterButtonActive: {
     backgroundColor: "#4CAF50",
