@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from "react";
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, TextInput, ScrollView } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import moment from "moment"; // Utilisation de la bibliothèque moment.js pour les dates
 =======
+=======
+>>>>>>> feature/map-location
 import { Picker } from "@react-native-picker/picker";
 import {
   View,
@@ -16,17 +19,25 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import moment from "moment";
+<<<<<<< HEAD
 >>>>>>> feature/filter-tasks
+=======
+import MapView, { Marker } from "react-native-maps";
+>>>>>>> feature/map-location
 
 export default function HomeScreen({ navigation }) {
   const [notes, setNotes] = useState([]);
   const [categoryFilter, setCategoryFilter] = useState("all"); // "all", "notes", "tasks", "completed", "pending"
   const [searchText, setSearchText] = useState("");
 <<<<<<< HEAD
+<<<<<<< HEAD
   const [timeFilter, setTimeFilter] = useState("today"); // Filtre de temps (today, week, month)
 =======
   const [timeFilter, setTimeFilter] = useState("all"); // "all", "today", "week", "month"
 >>>>>>> feature/filter-tasks
+=======
+  const [timeFilter, setTimeFilter] = useState("all"); // "all", "today", "week", "month"
+>>>>>>> feature/map-location
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
@@ -46,6 +57,7 @@ export default function HomeScreen({ navigation }) {
     }
   };
 
+<<<<<<< HEAD
 <<<<<<< HEAD
   const filterByTime = (note) => {
     const noteDate = moment(note.date); // Moment.js pour gérer les dates
@@ -71,6 +83,8 @@ export default function HomeScreen({ navigation }) {
       (filter === "notes" && note.category === "note") ||
       (filter === "tasks" && note.category === "tâche");
 =======
+=======
+>>>>>>> feature/map-location
   // Fonction de filtrage par période
   const matchesTimeFilter = (note) => {
     if (timeFilter === "all") return true;
@@ -82,7 +96,10 @@ export default function HomeScreen({ navigation }) {
     if (timeFilter === "month") return noteDate.isSame(now, "month");
     return true;
   };
+<<<<<<< HEAD
 >>>>>>> feature/filter-tasks
+=======
+>>>>>>> feature/map-location
 
   // Filtrage par catégorie
   const matchesCategoryFilter = (note) => {
@@ -95,11 +112,14 @@ export default function HomeScreen({ navigation }) {
   };
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     const matchesTime = filterByTime(note);
 
     return matchesFilter && matchesSearch && matchesTime;
   });
 =======
+=======
+>>>>>>> feature/map-location
   // Filtrage par recherche textuelle
   const matchesSearchFilter = (note) => {
     if (!searchText) return true;
@@ -109,7 +129,10 @@ export default function HomeScreen({ navigation }) {
       (note.description && note.description.toLowerCase().includes(lowerSearch))
     );
   };
+<<<<<<< HEAD
 >>>>>>> feature/filter-tasks
+=======
+>>>>>>> feature/map-location
 
   // Combinaison des filtres
   const filteredNotes = notes.filter(
@@ -132,6 +155,7 @@ export default function HomeScreen({ navigation }) {
         style={[
           styles.filterButtonText,
           categoryFilter === value && styles.filterButtonTextActive,
+<<<<<<< HEAD
         ]}
       >
         {title}
@@ -152,6 +176,8 @@ export default function HomeScreen({ navigation }) {
         style={[
           styles.filterButtonText,
           timeFilter === value && styles.filterButtonTextActive,
+=======
+>>>>>>> feature/map-location
         ]}
       >
         {title}
@@ -159,8 +185,11 @@ export default function HomeScreen({ navigation }) {
     </TouchableOpacity>
   );
 
+<<<<<<< HEAD
   const renderItem = ({ item }) => (
 =======
+=======
+>>>>>>> feature/map-location
   // Sélecteur de période
   const TimeFilterPicker = () => (
     <View style={styles.timeFilterContainer}>
@@ -180,7 +209,10 @@ export default function HomeScreen({ navigation }) {
 
   // Rendu d'une note/tâche
   const renderNoteItem = ({ item }) => (
+<<<<<<< HEAD
 >>>>>>> feature/filter-tasks
+=======
+>>>>>>> feature/map-location
     <TouchableOpacity
       style={styles.noteItem}
       onPress={() => navigation.navigate("NoteDetail", { note: item })}
@@ -194,17 +226,35 @@ export default function HomeScreen({ navigation }) {
             {item.title}
           </Text>
           <Text
-            style={[
-              styles.noteDescription,
-              item.completed && styles.completedText,
-            ]}
+            style={[styles.noteDescription, item.completed && styles.completedText]}
           >
             {item.description}
           </Text>
         </View>
         <View style={styles.noteMetadata}>
           <Text style={styles.noteDate}>{item.date}</Text>
-          {item.location && <Text style={styles.noteIcon}>📍</Text>}
+          {item.location && (
+            <View style={styles.mapContainer}>
+              <MapView
+                style={styles.map}
+                initialRegion={{
+                  latitude: item.location.latitude,
+                  longitude: item.location.longitude,
+                  latitudeDelta: 0.0922,
+                  longitudeDelta: 0.0421,
+                }}
+              >
+                <Marker
+                  coordinate={{
+                    latitude: item.location.latitude,
+                    longitude: item.location.longitude,
+                  }}
+                  title="Emplacement"
+                  description="Localisation de la note"
+                />
+              </MapView>
+            </View>
+          )}
           {item.photo && <Text style={styles.noteIcon}>📷</Text>}
         </View>
       </View>
@@ -235,6 +285,7 @@ export default function HomeScreen({ navigation }) {
       </ScrollView>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -246,11 +297,16 @@ export default function HomeScreen({ navigation }) {
       </ScrollView>
 
 =======
+=======
+>>>>>>> feature/map-location
       {/* Sélecteur de période */}
       <TimeFilterPicker />
 
       {/* Bouton d'ajout */}
+<<<<<<< HEAD
 >>>>>>> feature/filter-tasks
+=======
+>>>>>>> feature/map-location
       <TouchableOpacity
         style={styles.addButton}
         onPress={() => navigation.navigate("AddNote")}
@@ -285,9 +341,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginBottom: 10,
 <<<<<<< HEAD
+<<<<<<< HEAD
     height: 40, // Augmenter la hauteur pour les boutons de filtre
 =======
 >>>>>>> feature/filter-tasks
+=======
+>>>>>>> feature/map-location
   },
   filterButton: {
     backgroundColor: "#e0e0e0",
@@ -374,5 +433,19 @@ const styles = StyleSheet.create({
   noteIcon: {
     fontSize: 18,
     marginLeft: 8,
+<<<<<<< HEAD
+=======
+  },
+  mapContainer: {
+    width: "100%",
+    height: 200,
+    marginTop: 10,
+    borderRadius: 8,
+    overflow: "hidden",
+    marginBottom: 10,
+  },
+  map: {
+    flex: 1,
+>>>>>>> feature/map-location
   },
 });

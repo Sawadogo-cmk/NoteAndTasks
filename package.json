@@ -38,6 +38,8 @@
     "react-native": "^0.76.7",
 >>>>>>> feature/filter-tasks
     "react-native-gesture-handler": "~2.20.2",
+    "react-native-maps": "^1.20.1",
+    "react-native-permissions": "^5.2.5",
     "react-native-reanimated": "^3.16.7",
     "react-native-safe-area-context": "4.12.0",
     "react-native-vector-icons": "^10.2.0",
